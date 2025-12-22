@@ -1,6 +1,6 @@
 using API.Data;
 using API.Entities;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +9,7 @@ namespace API.Controllers
     /** 
     * *[controller] 會回傳目前控制器的名稱，這裡是 Members
     */
-    [Route("api/[controller]")]  // 訪問路徑: localhost/api/members
-    [ApiController]
-    public class MembersController(AddDbContext context) : ControllerBase
+    public class MembersController(AddDbContext context) : BaseAPIController
     {
         /**
         * 使用 異步方法 提高效能
@@ -31,6 +29,7 @@ namespace API.Controllers
             return members;
         }
 
+        [Authorize]
         [HttpGet("{id}")]  // GET: api/members/{id}
         public async Task<ActionResult<AppUser>> GetMemberById(string id)
         {

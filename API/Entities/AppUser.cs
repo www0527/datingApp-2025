@@ -7,7 +7,9 @@ public class AppUser
 // * required : 屬性在物件初始化時必須被賦值。
 // * Guid.NewGuid().ToString() : 為 Id 屬性生成一個唯一的識別碼。
 
-    public required string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public required string DisplayName { get; set; }
     public required string Email { get; set; }
+    public required byte[] PasswordHash { get; set; }
+    public required byte[] PasswordSalt { get; set; }
 }
