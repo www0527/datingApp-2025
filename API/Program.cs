@@ -55,7 +55,7 @@ app.UseCors(x =>        // * 使用 CORS 中介軟體，並設定允許的來源
      .WithOrigins("http://localhost:4200", "https://localhost:4200")
 );
 
- // * 使用驗證中介軟體
+ // * 使用驗證中介軟體，順序不可顛倒
 app.UseAuthentication();
 app.UseAuthorization();
 
