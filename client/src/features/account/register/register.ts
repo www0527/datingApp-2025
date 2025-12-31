@@ -4,30 +4,30 @@ import { RegisterData, UserInfo } from '../../../type/User';
 import { AccountService } from '../../../core/services/account-service';
 
 @Component({
-  selector: 'app-register',
-  imports: [FormsModule],
-  templateUrl: './register.html',
-  styleUrl: './register.css',
+	selector: 'app-register',
+	imports: [FormsModule],
+	templateUrl: './register.html',
+	styleUrl: './register.css',
 })
 export class Register {
-  private accountService = inject(AccountService);
+	private accountService = inject(AccountService);
 
-  cancelRegister = output<boolean>();
-  protected registerData = {} as RegisterData;
+	cancelRegister = output<boolean>();
+	protected registerData = {} as RegisterData;
 
-  protected confirmPassword = '' as string;
+	protected confirmPassword = '' as string;
 
-  register() {
-    this.accountService.register(this.registerData).subscribe({
-      next: res => {
-        console.log(res)
-        this.cancel()
-      },
-      error: err => console.log(err)
-    });
-  }
+	register() {
+		this.accountService.register(this.registerData).subscribe({
+			next: res => {
+				console.log(res)
+				this.cancel()
+			},
+			error: err => console.log(err)
+		});
+	}
 
-  cancel(): void {
-    this.cancelRegister.emit(false);
-  }
+	cancel(): void {
+		this.cancelRegister.emit(false);
+	}
 }
