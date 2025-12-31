@@ -1,0 +1,20 @@
+<div class="card bg-base-100 w-1/2 mx-auto flex flex-col p-6 rounded-lg shadow-lg">
+    <div class="card-title justify-center text-3xl text-primary">註冊</div>
+    <div class="card-body w-full">
+        <form #registerForm="ngForm" class="flex flex-col gap-4 w-full" (ngSubmit)="register()">
+            <!-- 表單欄位 -->
+            <input type="text" class="input w-full" name="email" [(ngModel)]="registerData.email" placeholder="電子郵件" />
+            <input type="text" class="input w-full" name="displayName" [(ngModel)]="registerData.displayName"
+                placeholder="使用者名稱" />
+            <input type="password" class="input w-full" name="password" [(ngModel)]="registerData.password"
+                placeholder="密碼" />
+            <input type="password" class="input w-full" name="confirmPassword" [(ngModel)]="confirmPassword"
+                placeholder="確認密碼" />
+            <!-- 提交按鈕 -->
+            <div class="flex flex-col items-center justify-end gap-3">
+                <button type="submit" class="btn w-full bg-primary text-base-100">註冊</button>
+                <button type="button" class="btn w-full" (click)="cancel()">取消</button>
+            </div>
+        </form>
+    </div>
+</div>

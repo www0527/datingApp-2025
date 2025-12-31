@@ -61,11 +61,12 @@ public class AccountController(AddDbContext context, ITokenService tokenService)
     {
         var user = await context.Users.SingleOrDefaultAsync(uer => uer.Email == loginDto.Email);
 
-        // 不存 Email 在返回 401 未授權
+        // 不存在 Email 返回 401 未授權
         if (user == null) return Unauthorized("無效的電子郵件");
 
-        // 驗證密碼
         using var hmac = new HMACSHA512(user.PasswordSalt);
+        
+        // 驗證密碼
         var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
         for (int i = 0; i < computedHash.Length; i++)
         {

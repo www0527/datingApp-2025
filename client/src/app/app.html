@@ -1,17 +1,2 @@
 <app-nav />
-
-<div class="card bg-base-100 w-1/2 mx-auto p-10 mt-24 shadow-xl">
-  <h3 class="text-3xl text-red-500">{{ title() }}</h3>
-
-  <ul class="list">
-    @for (user of members(); track user.Id) {
-      <li class="list-row items-center">
-        <div>{{ user.id }}</div>
-        <img src="/user.webp" alt="User Image" class="size-12 rounded-box"/>
-        <div>{{ user.displayName }}</div>
-        <div>{{ user.email }}</div>
-      </li>
-    }
-  </ul>
-  <button class="btn btn-primary">Click me</button>
-</div>
+<app-home />

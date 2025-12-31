@@ -22,16 +22,16 @@ builder.Services.AddDbContext<AddDbContext>(
     }
 );
 // * 配置 CORS 服務
-builder.Services.AddCors();      
+builder.Services.AddCors();
 
 // JWT 服務註冊，使用 AddScoped<{Interface}, {Service}> 方法註冊服務, 
 builder.Services.AddScoped<ITokenService, TokenService>();  // 生命週期為單個 HTTP 請求
 
 // 建立驗證服務
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer( option =>
+.AddJwtBearer(option =>
 {
-    var tokenKey = builder.Configuration["TokenKey"] 
+    var tokenKey = builder.Configuration["TokenKey"]
         ?? throw new Exception("Token key not found");
     option.TokenValidationParameters = new TokenValidationParameters
     {
@@ -48,16 +48,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseCors(x =>        // * 使用 CORS 中介軟體，並設定允許的來源、標頭和方法
+app.UseCors(x =>                // * 使用 CORS 中介軟體，並設定允許的來源、標頭和方法
     x.AllowAnyHeader()
      .AllowAnyMethod()
      .AllowAnyOrigin()
      .WithOrigins("http://localhost:4200", "https://localhost:4200")
 );
 
- // * 使用驗證中介軟體，順序不可顛倒
-app.UseAuthentication();
-app.UseAuthorization();
+// * 使用驗證中介軟體，順序不可顛倒
+app.UseAuthentication();        // 驗證使用者身份
+app.UseAuthorization();         // 授權使用者存取資源
 
 app.MapControllers();
 

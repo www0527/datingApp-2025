@@ -50,7 +50,7 @@ namespace API.Controllers
         /// <param name="id">使用者唯一識別碼。</param>
         /// <returns>找到則回傳 AppUser (HTTP 200)；找不到則回傳 NotFound (HTTP 404)。</returns>
         #endregion
-        [Authorize]
+        [Authorize]        // 依賴 microsoft.AspNetCore.Authorization.JwtBearer 套件
         [HttpGet("{id}")]  // GET: api/members/{id}
         public async Task<ActionResult<AppUser>> GetMemberById(string id)
         {

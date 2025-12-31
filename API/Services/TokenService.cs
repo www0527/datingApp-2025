@@ -32,7 +32,7 @@ public class TokenService(IConfiguration config) : ITokenService
         if (token.Length < 64)
             throw new Exception("TokenKey 必須至少包含 64 個字元");
 
-        // 建立對稱安全密鑰
+        // 建立對稱安全密鑰（依賴：System.IdentityModel.Tokens.Jwt、microsoft.IdentityModel.Tokens）
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token));
 
         // 取得用戶聲明並傳回資料
