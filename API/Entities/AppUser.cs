@@ -24,6 +24,8 @@ public class AppUser
     #endregion
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
+    public string ImageUrl { get; set; } = string.Empty;
+
     #region 使用者_顯示名稱
     /// <summary>
     /// 使用者顯示名稱，建立物件時應提供。
@@ -51,4 +53,7 @@ public class AppUser
     /// </summary>
     #endregion
     public required byte[] PasswordSalt { get; set; }
+
+    // Navigation properties
+    public Member Member { get; set; } = null!;
 }

@@ -34,7 +34,7 @@ builder.Services.AddControllers();
 /// <summary>
 /// 配置 DbContext，決定系統使用的資料庫。
 /// </summary>
-builder.Services.AddDbContext<AddDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -48,6 +48,7 @@ builder.Services.AddCors();
 /// JWT 服務註冊，使用 AddScoped 方法註冊服務，生命週期為單個 HTTP 請求。
 /// </summary>
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 
 /// <summary>
 /// 建立 JWT 驗證服務。
@@ -98,5 +99,19 @@ app.UseAuthentication();  // 驗證使用者身份
 app.UseAuthorization();   // 授權使用者存取資源
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(context);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred during migration or seeding.");
+}
 
 app.Run();

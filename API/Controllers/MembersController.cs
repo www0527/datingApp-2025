@@ -1,8 +1,7 @@
-using API.Data;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -14,7 +13,8 @@ namespace API.Controllers
     /// <param name="context">資料庫上下文，用於存取 AppUser 實體。</param>
     /// </summary>
     #endregion
-    public class MembersController(AddDbContext context) : BaseAPIController
+    [Authorize]        // 依賴 microsoft.AspNetCore.Authorization.JwtBearer 套件
+    public class MembersController(IMemberRepository memberRepository) : BaseAPIController
     {
         #region 解說
         /**
@@ -30,17 +30,16 @@ namespace API.Controllers
         #endregion
         #region 取得_所有成員_GetMembers
         /// <summary>
-        /// 非同步取得所有使用者（只讀列表）。
+        /// 非同步取得所有使用者（只讀列表、需授權）。
         /// </summary>
         /// <returns>包含 AppUser 實體的只讀列表 (HTTP 200)；若發生例外則回傳相對應錯誤碼。</returns>
         /// <remarks>使用 Entity Framework Core 的 ToListAsync 提高非同步效能。</remarks>
         #endregion
         [HttpGet] // GET: api/members
-        public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
+        public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
         {
-            var members = await context.Users.ToListAsync(); // ToListAsync() : 非同步地將查詢結果轉換為列表
+            return Ok(await memberRepository.GetMembersAsync());
 
-            return members;
         }
 
         #region 取得_單一成員_ById_GetMemberById
@@ -50,15 +49,27 @@ namespace API.Controllers
         /// <param name="id">使用者唯一識別碼。</param>
         /// <returns>找到則回傳 AppUser (HTTP 200)；找不到則回傳 NotFound (HTTP 404)。</returns>
         #endregion
-        [Authorize]        // 依賴 microsoft.AspNetCore.Authorization.JwtBearer 套件
         [HttpGet("{id}")]  // GET: api/members/{id}
-        public async Task<ActionResult<AppUser>> GetMemberById(string id)
+        public async Task<ActionResult<Member>> GetMemberById(string id)
         {
-            var member = await context.Users.FindAsync(id);
+            var member = await memberRepository.GetMemberByIdAsync(id);
 
             if (member == null) return NotFound();
 
             return member;
+        }
+
+        #region 取得_成員照片列表_GetMemberPhotos
+        /// <summary>
+        /// 根據成員 Id 非同步取得該成員的所有照片。
+        /// </summary>
+        /// <param name="id">成員唯一識別碼。</param>
+        /// <returns>包含 Photo 實體的只讀列表 (HTTP 200)。</returns>
+        #endregion
+        [HttpGet("{id}/photos")]
+        public async Task<ActionResult<IReadOnlyList<Photo>>> GetMemberPhotos(string id)
+        {
+            return Ok(await memberRepository.GetPhotosForMemberIdAsync(id));
         }
     }
 }

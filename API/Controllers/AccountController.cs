@@ -16,7 +16,7 @@ namespace API.Controllers;
 /// 處理與帳戶相關的 API 請求，例如註冊和登入。
 /// </summary>
 #endregion
-public class AccountController(AddDbContext context, ITokenService tokenService) : BaseAPIController
+public class AccountController(AppDbContext context, ITokenService tokenService) : BaseAPIController
 {
 
     #region 註冊新使用者
@@ -65,7 +65,7 @@ public class AccountController(AddDbContext context, ITokenService tokenService)
         if (user == null) return Unauthorized("無效的電子郵件");
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
-        
+
         // 驗證密碼
         var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
         for (int i = 0; i < computedHash.Length; i++)

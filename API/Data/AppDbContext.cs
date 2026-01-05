@@ -11,8 +11,12 @@ namespace API.Data;
 /// </summary>
 /// <param name="options">DbContext 配置選項，由 DI 提供，包含供應者與連線字串等設定。</param>
 #endregion
-public class AddDbContext(DbContextOptions options) : DbContext(options)
+public class AppDbContext : DbContext
 {
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
+    {
+    }
     #region 使用者集合_Users
     /// <summary>
     /// AppUser 實體集合的 DbSet，代表資料庫中的使用者表格。
@@ -20,4 +24,6 @@ public class AddDbContext(DbContextOptions options) : DbContext(options)
     /// </summary>
     #endregion
     public DbSet<AppUser> Users { get; set; }
+    public DbSet<Member> Members { get; set; }
+    public DbSet<Photo> Photos { get; set; }
 }
