@@ -8,6 +8,10 @@ import { authGuard } from '../core/guards/auth-guard';
 import { TestErrors } from '../features/test-errors/test-errors';
 import { NotFound } from '../shared/errors/not-found/not-found';
 import { ServerError } from '../shared/errors/server-error/server-error';
+import { MemberProfile } from '../features/members/member-profile/member-profile';
+import { MemberPhotos } from '../features/members/member-photos/member-photos';
+import { MemberMessages } from '../features/members/member-messages/member-messages';
+import { memberResolver } from '../features/members/member-resolver';
 
 export const routes: Routes = [
     // 路徑, 導向元件,
@@ -18,7 +22,18 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             { path: 'members', component: MemberList },
-            { path: 'members/:id', component: MemberDetailed },
+            {
+                path: 'members/:id',
+                resolve: { member: memberResolver },     // 使用 memberResolver 來預先加載成員資料
+                runGuardsAndResolvers: 'always',         // 每次導航時都運行守衛和解析器
+                component: MemberDetailed,
+                children: [
+                    { path: '', redirectTo: 'profile', pathMatch: 'full' },
+                    { path: 'profile', component: MemberProfile, title: '個人檔案' },
+                    { path: 'photos', component: MemberPhotos, title: '照片' },
+                    { path: 'messages', component: MemberMessages, title: '聊天室' },
+                ]
+            },
             { path: 'lists', component: Lists },
             { path: 'messages', component: Messages },
         ]

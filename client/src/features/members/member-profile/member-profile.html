@@ -1,0 +1,14 @@
+@if (member$ | async; as member) {
+    <div class="flex flex-col gap-3">
+        <div class="flex gap-3">
+            <span class="font-semibold">加入日期:</span>
+            <span>{{ member.created | date: 'yyyy-MM-dd' }}</span>
+        </div>
+        <div class="flex gap-3">
+            <span class="font-semibold">最後活躍時間:</span>
+            <span>{{ member.lastActive | date: 'yyyy-MM-dd HH:mm a' }}</span>
+        </div>
+        <h2 class="text-lg font-semibold text-primary">About {{ member.displayName }}</h2>
+        <div>{{ member.description }}</div>
+    </div>
+}

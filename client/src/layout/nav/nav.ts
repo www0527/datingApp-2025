@@ -1,10 +1,11 @@
 // ...existing code...
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
 import { LoginData } from '../../type/User';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ToastService } from '../../core/services/toast-service';
+import { themes } from '../theme';
 
 
 /**
@@ -17,10 +18,23 @@ import { ToastService } from '../../core/services/toast-service';
     templateUrl: './nav.html',
     styleUrl: './nav.css',
 })
-export class Nav {
+export class Nav implements OnInit {
     protected accountService = inject(AccountService);
     private router = inject(Router);
     private toast = inject(ToastService);
+    protected selectedTheme = signal<string>(localStorage.getItem('theme') || 'light');
+    protected themes = themes;
+
+    handleSelectTheme(theme: string) {
+        this.selectedTheme.set(theme);
+        localStorage.setItem('theme', theme);
+        document.documentElement.setAttribute('data-theme', this.selectedTheme());
+        const element = document.activeElement as HTMLElement;
+        element?.blur();
+    }
+    ngOnInit(): void {
+        throw new Error('Method not implemented.');
+    }
 
     /**
      * 綁定登入表單資料 (雙向綁定於模板)。

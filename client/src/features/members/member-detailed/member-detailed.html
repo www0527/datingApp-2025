@@ -1,1 +1,41 @@
-<p>member-detailed works!</p>
+@if (member$ | async; as member){
+<div class="flex gap-6 h-[calc(100vh-6rem)]">
+    <div class="card bg-base-100 flex flex-col w-1/4">
+        <img src="{{member.imageUrl || '/user.png'}}" alt="image of member"
+            class="rounded-full mx-16 mt-3 object-cover">
+        <div class="card-body">
+            <div class="flex flex-col items-center">
+                <div class="flex text-2xl text-primary items-center">
+                    {{member.displayName}}, {{member.dateOfBirth | age}}
+                </div>
+
+                <div class="text-sm">
+                    {{member.city}}, {{member.country}}
+                </div>
+
+                <div class="divider"></div>
+
+                <ul class="menu rounded-box w-full text-xl">
+                    <li><a routerLink="profile" routerLinkActive="text-primary">個人檔案</a></li>
+                    <li><a routerLink="photos" routerLinkActive="text-primary">照片</a></li>
+                    <li><a routerLink="messages" routerLinkActive="text-primary">聊天室</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card-actions justify-between gap-2 px-2 mb-3">
+            <button class="btn btn-primary flex-1">喜歡他/她</button>
+            <button routerLink="/members" class="btn btn-info flex-1">返回</button>
+        </div>
+    </div>
+    <div class="card bg-base-100 w-3/4 p-6">
+        <h3 class="card-title text-3xl text-primary">{{title$ | async}}</h3>
+        <div class="divider"></div>
+        <div>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+} @else {
+<div>並未找到使用者</div>
+}
